@@ -8,8 +8,8 @@ from sklearn.preprocessing import LabelEncoder
 MODEL_PATH = 'Best_Voting_Model.joblib'
 model = joblib.load(MODEL_PATH)
 
-# Load the dataset (you need to upload your dataset to the same repository)
-DATASET_PATH = 'Unit1_Shapes_5000_Subtopics.csv'
+# Load the dataset (uploaded to your GitHub repository)
+DATASET_PATH = './Unit1_Shapes_5000_Subtopics.csv'
 data = pd.read_csv(DATASET_PATH)
 
 # Streamlit App Title
@@ -45,16 +45,21 @@ if st.button("Submit Answer"):
         subtopic_encoded = le_subtopic.transform([subtopic])[0]
         qtype_encoded = le_qtype.transform([qtype])[0]
         difficulty_encoded = le_difficulty.transform([difficulty])[0]
-        
+
+        # Prepare the input data for the model
         input_data = [[subtopic_encoded, qtype_encoded, difficulty_encoded]]
         
-        # Make prediction (simulating answer checking with AI)
+        # Make prediction with the AI model
         prediction = model.predict(input_data)[0]
         
-        # Check if the user's answer matches the correct answer
+        # Compare the user's answer with the model's prediction
         if user_answer.lower() == str(correct_answer).lower():
             st.success("✅ Correct! Well done!")
         else:
             st.error(f"❌ Incorrect! The correct answer is: {correct_answer}")
+            
+        # Display model's interpretation of the answer
+        st.write(f"🤖 AI Model Prediction: {prediction}")
+
     else:
         st.warning("❗ Please enter an answer before submitting.")
