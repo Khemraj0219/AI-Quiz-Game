@@ -1,21 +1,11 @@
 import streamlit as st
 import joblib
 import pandas as pd
-import pyttsx3
 from sklearn.preprocessing import LabelEncoder
 
 # Load the trained model
 MODEL_PATH = 'Best_Voting_Model.joblib'
 model = joblib.load(MODEL_PATH)
-
-# Initialize Text-to-Speech engine
-engine = pyttsx3.init()
-engine.setProperty('rate', 150)
-engine.setProperty('volume', 1.0)
-
-def speak(text):
-    engine.say(text)
-    engine.runAndWait()
 
 def make_prediction(subtopic, question_type, difficulty_level):
     """
@@ -55,14 +45,12 @@ question = st.text_input("🔍 Enter your question here:")
 
 if st.button("Submit Question"):
     if question:
-        speak(f"You asked: {question}")
         st.write("🔄 Processing your question...")
 
         # Make a prediction using the model
         prediction = make_prediction(subtopic, question_type, difficulty_level)
         
         st.success(f"🤖 Predicted Answer: {prediction}")
-        speak(f"Predicted Answer: {prediction}")
     else:
         st.warning("❗ Please enter a question.")
 
