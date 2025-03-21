@@ -48,10 +48,10 @@ if st.session_state.question_index < 10:
 
     # Display the question
     st.write(f"### Question {st.session_state.question_index + 1}: {question}")
-    user_answer = st.text_input("Your Answer:")
+    user_answer = st.text_input("Your Answer:", key=f"answer_{st.session_state.question_index}")
 
     # Play question as audio
-    if st.button("Play Question"):
+    if st.button("Play Question", key=f"play_{st.session_state.question_index}"):
         tts = gTTS(text=question, lang='en')
         tts.save("question.mp3")
         audio_file = open("question.mp3", "rb")
@@ -59,7 +59,7 @@ if st.session_state.question_index < 10:
         audio_file.close()
         os.remove("question.mp3")
     
-    if st.button("Submit Answer"):
+    if st.button("Submit Answer", key=f"submit_{st.session_state.question_index}"):
         if user_answer.strip() != "":
             # Prepare input for the model
             subtopic_encoded = le_subtopic.transform([subtopic])[0]
@@ -85,16 +85,15 @@ if st.session_state.question_index < 10:
 
             st.write(f"🤖 AI Model Prediction: {prediction}")
             
-            # Move to the next question
+            # Move to the next question without rerunning the entire script
             st.session_state.question_index += 1
-            st.experimental_rerun()  # Trigger a rerun to display the next question
 
     # Display feedback if there was a previous attempt
     if st.session_state.last_answer_correct is not None:
         if st.session_state.last_answer_correct:
-            st.write("You answered the previous question correctly. Good job!")
+            st.info("You answered the previous question correctly. Good job!")
         else:
-            st.write("You answered the previous question incorrectly. Try the next one!")
+            st.info("You answered the previous question incorrectly. Try the next one!")
 
 else:
     # Display final score and feedback
