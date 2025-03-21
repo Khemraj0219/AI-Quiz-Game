@@ -28,12 +28,13 @@ data['Subtopic Encoded'] = le_subtopic.fit_transform(data['Subtopic'])
 data['Question Type Encoded'] = le_qtype.fit_transform(data['Question Type'])
 data['Difficulty Level Encoded'] = le_difficulty.fit_transform(data['Difficulty Level'])
 
-# Initialize Session State for Score Tracking
+# Initialize Session State for Score Tracking and Game Progress
 if 'score' not in st.session_state:
     st.session_state.score = 0
     st.session_state.question_index = 0
     st.session_state.questions = data.sample(10).reset_index(drop=True)
     st.session_state.feedback = []
+    st.session_state.last_answer_correct = None
 
 # Check if all questions have been answered
 if st.session_state.question_index < 10:
@@ -74,16 +75,26 @@ if st.session_state.question_index < 10:
             # Check if the user's answer matches the correct answer
             if user_answer.lower().strip() == str(correct_answer).lower().strip():
                 st.session_state.score += 1
+                st.session_state.last_answer_correct = True
                 st.success(f"✅ Correct! Well done! The correct answer is: {correct_answer}")
-                st.session_state.feedback.append(f"Q{st.session_state.question_index + 1}: Correct!")
+                st.session_state.feedback.append(f"Q{st.session_state.question_index + 1}: ✅ Correct!")
             else:
+                st.session_state.last_answer_correct = False
                 st.error(f"❌ Incorrect! The correct answer is: {correct_answer}")
-                st.session_state.feedback.append(f"Q{st.session_state.question_index + 1}: Incorrect!")
+                st.session_state.feedback.append(f"Q{st.session_state.question_index + 1}: ❌ Incorrect!")
 
             st.write(f"🤖 AI Model Prediction: {prediction}")
             
             # Move to the next question
             st.session_state.question_index += 1
+            st.experimental_rerun()  # Trigger a rerun to display the next question
+
+    # Display feedback if there was a previous attempt
+    if st.session_state.last_answer_correct is not None:
+        if st.session_state.last_answer_correct:
+            st.write("You answered the previous question correctly. Good job!")
+        else:
+            st.write("You answered the previous question incorrectly. Try the next one!")
 
 else:
     # Display final score and feedback
@@ -99,3 +110,4 @@ else:
         st.session_state.question_index = 0
         st.session_state.feedback = []
         st.session_state.questions = data.sample(10).reset_index(drop=True)
+        st.session_state.last_answer_correct = None
