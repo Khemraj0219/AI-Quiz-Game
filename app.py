@@ -4,11 +4,11 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 
 # Load the trained model
-MODEL_PATH = 'Grade 6/Best_Voting_Model.joblib'
+MODEL_PATH = 'Best_Voting_Model.joblib'
 model = joblib.load(MODEL_PATH)
 
 # Load the dataset (uploaded to your GitHub repository)
-DATASET_PATH = 'Grade 6/Unit1_Shapes_5000_Subtopics.csv'
+DATASET_PATH = 'Unit1_Shapes_5000_Subtopics.csv'
 data = pd.read_csv(DATASET_PATH)
 
 # Streamlit App Title
