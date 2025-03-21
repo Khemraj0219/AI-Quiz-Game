@@ -9,7 +9,7 @@ MODEL_PATH = 'Best_Voting_Model.joblib'
 model = joblib.load(MODEL_PATH)
 
 # Load the dataset (uploaded to your GitHub repository)
-DATASET_PATH = './Unit1_Shapes_5000_Subtopics.csv'
+DATASET_PATH = 'Unit1_Shapes_5000_Subtopics.csv'
 data = pd.read_csv(DATASET_PATH)
 
 # Streamlit App Title
