@@ -1,15 +1,14 @@
 import streamlit as st
 import joblib
 import pandas as pd
-import random
 from sklearn.preprocessing import LabelEncoder
 
 # Load the trained model
-MODEL_PATH = 'Best_Voting_Model.joblib'
+MODEL_PATH = 'Grade 6/Best_Voting_Model.joblib'
 model = joblib.load(MODEL_PATH)
 
 # Load the dataset (uploaded to your GitHub repository)
-DATASET_PATH = 'Unit1_Shapes_5000_Subtopics.csv'
+DATASET_PATH = 'Grade 6/Unit1_Shapes_5000_Subtopics.csv'
 data = pd.read_csv(DATASET_PATH)
 
 # Streamlit App Title
@@ -51,15 +50,15 @@ if st.button("Submit Answer"):
         
         # Make prediction with the AI model
         prediction = model.predict(input_data)[0]
-        
+
+        # Display Model's Prediction
+        st.write(f"🤖 AI Model Prediction: {prediction}")
+
         # Compare the user's answer with the model's prediction
-        if user_answer.lower() == str(correct_answer).lower():
+        if user_answer.lower().strip() == str(correct_answer).lower().strip():
             st.success("✅ Correct! Well done!")
         else:
             st.error(f"❌ Incorrect! The correct answer is: {correct_answer}")
             
-        # Display model's interpretation of the answer
-        st.write(f"🤖 AI Model Prediction: {prediction}")
-
     else:
         st.warning("❗ Please enter an answer before submitting.")
